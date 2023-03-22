@@ -10,6 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator aimingArrow;
     [SerializeField] Animator testAnim;
 
+    [SerializeField] List<Rigidbody> ballBody;
+    [SerializeField] Transform throwDirection;
+    [SerializeField] float throwForce;
+
+    public bool wasBallThrown;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,12 +27,31 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C))
+        TryThrowBall();
+    }
+
+    void TryThrowBall()
+    {
+        if(wasBallThrown || !Input.GetButtonDown("Fire1"))
+        {
+            return;
+        }
+
+        wasBallThrown = true;
+
+        var selectedPrefab = ballBody[Random.Range(0, ballBody.Count)];
+
+        var newBallBody = Instantiate(selectedPrefab, throwDirection.position, throwDirection.rotation);
+        newBallBody.AddForce(-throwDirection.forward * throwForce, ForceMode.Impulse);
+    }
+    void SwitchAnimation()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
         {
             aimingArrow.SetBool("Aiming", false);
 
             testAnim.Play("Rotate");
             testAnim.Play("Scale");
         }
-    }
+    }    
 }
