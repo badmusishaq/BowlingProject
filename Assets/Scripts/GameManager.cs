@@ -5,8 +5,29 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public int currentScore;
+
     private BowlingBall ball;
+    Pin[] currentPins = new Pin[0];
+
+    [SerializeField] GameObject[] objectsToDisable;
+
     [SerializeField] PlayerController playerController;
+
+    private void Start()
+    {
+        DisableAllObjects();
+    }
+    void DisableAllObjects()
+    {
+        /*foreach(var obj in objectsToDisable)
+        {
+            obj.SetActive(false);
+        }*/
+        for(int i = 0; i < objectsToDisable.Length; i++)
+        {
+            objectsToDisable[i].SetActive(false);
+        }
+    }
     public void PinKnockedDown()
     {
         currentScore++;
@@ -24,7 +45,16 @@ public class GameManager : MonoBehaviour
 
     private bool CheckIfPiecesAreStatic()
     {
-        return true;
+        foreach(var pin in currentPins)
+        {
+            if(pin != null && pin.DidPinMove())
+            {
+                return false;
+            }
+        }
+
+        var ballStatus = ball == null || !ball.DidBallMove();
+        return ballStatus;
     }
     void Update()
     {

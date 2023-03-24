@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
 
     public bool wasBallThrown;
 
+    [SerializeField] GameManager gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +45,8 @@ public class PlayerController : MonoBehaviour
 
         var newBallBody = Instantiate(selectedPrefab, throwDirection.position, throwDirection.rotation);
         newBallBody.AddForce(-throwDirection.forward * throwForce, ForceMode.Impulse);
+
+        gameManager.BallThrown(newBallBody.GetComponent<BowlingBall>());
     }
     void SwitchAnimation()
     {
