@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] GameObject ball;
-    [SerializeField] Vector3 cameraOffset;
+    //[SerializeField] GameObject ball;
+    //[SerializeField] Vector3 cameraOffset;
 
     [SerializeField] Animator aimingArrow;
     [SerializeField] Animator testAnim;
@@ -18,12 +18,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] GameManager gameManager;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        transform.position = ball.transform.position + cameraOffset;
+    [SerializeField] FollowTarget followTarget;
 
+    // Start is called before the first frame update
+    public void StartAiming()
+    {
         aimingArrow.SetBool("Aiming", true);
+        wasBallThrown = false;
+        followTarget.targetTransform = transform;
     }
 
     // Update is called once per frame

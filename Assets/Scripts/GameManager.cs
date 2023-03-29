@@ -9,13 +9,23 @@ public class GameManager : MonoBehaviour
     private BowlingBall ball;
     Pin[] currentPins = new Pin[0];
 
-    [SerializeField] GameObject[] objectsToDisable;
+    //[SerializeField] GameObject[] objectsToDisable;
 
     [SerializeField] PlayerController playerController;
 
+    [SerializeField] Transform pinSetDefaultPosition;
+    [SerializeField] GameObject pinSetPrefab;
+    [SerializeField] float throwTimeout = 10f;
+
+    bool throwStarted;
+    int throwNumber;
+    float remainingTimeout;
+
     private void Start()
     {
-        DisableAllObjects();
+        //DisableAllObjects();
+
+        Invoke(nameof(SetupFrame), 1);
     }
     void DisableAllObjects()
     {
@@ -23,10 +33,10 @@ public class GameManager : MonoBehaviour
         {
             obj.SetActive(false);
         }*/
-        for(int i = 0; i < objectsToDisable.Length; i++)
+        /*for(int i = 0; i < objectsToDisable.Length; i++)
         {
             objectsToDisable[i].SetActive(false);
-        }
+        }*/
     }
     public void PinKnockedDown()
     {
@@ -72,16 +82,68 @@ public class GameManager : MonoBehaviour
     private void SetupFrame()
     {
         currentScore = 0;
+        throwNumber = 0;
+
+        DisposeLastFrame();
+
+        Instantiate(pinSetPrefab, pinSetDefaultPosition.position, pinSetDefaultPosition.rotation);
+        currentPins = FindObjectsOfType<Pin>();
+
+        SetupThrow();
+    }
+
+    void DisposeLastFrame()
+    {
+        foreach(var pin in currentPins)
+        {
+            if(pin != null)
+            {
+                Destroy(pin.gameObject);
+            }
+        }
     }
 
     private void FinishThrow()
     {
         //Help us know when the object hits the pit and another object can be spawned.
-        Debug.Log("Finish throw called!");
+        throwStarted = false;
+
+        foreach(var pin in currentPins)
+        {
+            if(pin != null && pin.DidPinFall)
+            {
+                currentScore++;
+            }
+        }
+
+        if(throwNumber == 0 && currentScore < 10)
+        {
+            Invoke(nameof(SetupThrow), 1);
+            throwNumber++;
+            return;
+        }
+
+        Invoke(nameof(SetupFrame), 1);
     }
 
     private void SetupThrow()
     {
         //To handle object throwing after it has hit the pit
+        foreach(var pin in currentPins)
+        {
+            if(pin != null)
+            {
+                pin.ResetPosition();
+            }
+        }
+
+        if (ball != null)
+        {
+            Destroy(ball.gameObject);
+        }
+
+        playerController.StartAiming();
+        throwStarted = true;
+        remainingTimeout = throwTimeout;
     }
 }

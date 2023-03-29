@@ -129,7 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 566b5bbf9550b5e4ab444fbc355d2c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGameManager: {fileID: 5338335704780366526}
 --- !u!1 &5338335704780366526
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +141,7 @@ GameObject:
   - component: {fileID: 2905588476695059701}
   - component: {fileID: 7913374516617337852}
   - component: {fileID: 1170767940568766203}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PinHeadTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

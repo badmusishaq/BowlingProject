@@ -4,12 +4,39 @@ using UnityEngine;
 
 public class Pin : MonoBehaviour
 {
+    Vector3 startPosition;
+    Quaternion startRotation;
+
+    Rigidbody rb;
+
     Vector3 lastPosition;
     Quaternion lastRotation;
 
     int framesWithoutMoving;
 
     public bool DidPinFall { get; private set; }
+
+
+    private void Awake()
+    {
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+
+        rb = GetComponent<Rigidbody>();
+    }
+
+    public void ResetPosition()
+    {
+        rb.position = startPosition;
+        rb.rotation = startRotation;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        lastPosition = startPosition;
+        lastRotation = startRotation;
+
+    }
     public bool DidPinMove()
     {
         var didPinMove = (transform.position - lastPosition).magnitude > 0.0001f ||
