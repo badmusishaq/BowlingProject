@@ -10,7 +10,7 @@ public class BowlingBall : MonoBehaviour
     int framesWithoutMoving;
     public bool DidBallMove()
     {
-        var didBallMove = (transform.position - lastPosition).magnitude > 0.0001f ||
+        var didBallMove = (transform.position - lastPosition).magnitude > 0.001f ||
             Quaternion.Angle(transform.rotation, lastRotation) > 0.01f;
 
         lastPosition = transform.position;

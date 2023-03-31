@@ -39,7 +39,7 @@ public class Pin : MonoBehaviour
     }
     public bool DidPinMove()
     {
-        var didPinMove = (transform.position - lastPosition).magnitude > 0.0001f ||
+        var didPinMove = (transform.position - lastPosition).magnitude > 0.001f ||
             Quaternion.Angle(transform.rotation, lastRotation) > 0.01f;
 
         lastPosition = transform.position;
